@@ -85,3 +85,19 @@ def pandas_filter_function(itr):
 
 
 # grouping data
+
+df = spark.createDataFrame([
+    ['red', 'banana', 1, 10], ['blue', 'banana', 2, 20], ['red', 'carrot', 3, 30],
+    ['blue', 'grape', 4, 40], ['red', 'carrot', 5, 50], ['black', 'carrot', 6, 60],
+    ['red', 'banana', 7, 70], ['red', 'grape', 8, 80]], schema=['color', 'fruit', 'v1', 'v2'])
+# df.show()
+
+
+# grouping and applying the average function to the resulting groups
+# df.groupBy('color').avg().show()
+
+
+def plus_mean(pandas_df):
+    return pandas_df.assign(v1=pandas_df.v1 - pandas_df.v1.mean())
+
+df.groupby('color').applyInPandas(plus_mean, schema=df.schema).show()
